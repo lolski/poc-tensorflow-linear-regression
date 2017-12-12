@@ -12,8 +12,8 @@ def read_csv_file(path, skip_first_line):
             next(reader, None)
 
         accumulator = []
-        for row in reader:
-            accumulator.append(row)
+        for x, y in reader:
+            accumulator.append([x, y])
 
         return accumulator
 
@@ -30,7 +30,7 @@ y_predicted = m*x+b
 data = read_csv_file('res/train.csv', True)
 
 # step 3: apply gradient descent optimizer in order to find m and b
-num_of_epochs = 100
+num_of_epochs = 1000
 learning_rate=0.00001
 loss_fn = tf.square(y - y_predicted, name='loss')
 loss_fn_with_logs = tf.Print(loss_fn, [loss_fn, m, b])
@@ -54,7 +54,7 @@ data_plot = {
 }
 y_predicted_plot = {
     'x_axis': [0, 100],
-    'y_axis': [0, m_value*100 + b_value]
+    'y_axis': [0+b_value, m_value*100 + b_value]
 }
 plotly.offline.plot({
     'data': [
