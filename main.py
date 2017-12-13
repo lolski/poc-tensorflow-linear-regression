@@ -27,7 +27,8 @@ x = tf.placeholder(tf.float32, name='x')
 n = tf.Variable(0.0, name='slope2')
 z = tf.placeholder(tf.float32, name='z')
 b = tf.Variable(0.0, name='offset')
-y_predicted = m*x+n*z+b
+y_predicted = m*x+b
+y_predicted2 = n*z+b
 current_epoch = tf.placeholder(tf.int32, name='e')
 
 # step 2: read csv
@@ -36,17 +37,23 @@ data = read_csv_file('res/train.csv', True)
 # step 3: apply gradient descent optimizer in order to find m and b
 num_of_epochs = 1000
 learning_rate=0.0001
+
 loss_fn = tf.square(y - y_predicted, name='loss')
-loss_fn_with_logs = tf.Print(loss_fn, [current_epoch, loss_fn, m, n, b])
+loss_fn_with_logs = tf.Print(loss_fn, [current_epoch, loss_fn, m, b])
 optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss_fn_with_logs)
+
+loss_fn2 = tf.square(z - y_predicted2, name='loss')
+loss_fn_with_logs2 = tf.Print(loss_fn2, [current_epoch, loss_fn2, n, b])
+optimizer2 = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss_fn_with_logs2)
+
 with tf.Session() as s:
     s.run(tf.global_variables_initializer())
     print('training starts...')
     for i in range(num_of_epochs):
         for row in data:
             row_x, row_y, row_z = row
-            s.run(optimizer, feed_dict={x: row_x, y: row_y, z: row_z, current_epoch: [i]})
-        print('i=' + str(i))
+            s.run(optimizer, feed_dict={x: row_x, y: row_y, current_epoch: [i]})
+            s.run(optimizer2, feed_dict={y: row_y, z: row_z, current_epoch: [i]})
     m_value, n_value, b_value = s.run([m, n, b])
 
     print('training has ended. m=' + str(m_value) + ', n=' +str(n_value) + ', b='+ str(b_value))
