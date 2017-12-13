@@ -35,7 +35,7 @@ current_epoch = tf.placeholder(tf.int32, name='e')
 data = read_csv_file('res/train.csv', True)
 
 # step 3: apply gradient descent optimizer in order to find m and b
-num_of_epochs = 300
+num_of_epochs = 30
 learning_rate=0.0001
 
 loss_fn_yx = tf.square(y - model_yx, name='loss_fn_yx')
