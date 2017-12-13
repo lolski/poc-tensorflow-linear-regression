@@ -72,6 +72,6 @@ model_plot = {
 plotly.offline.plot({
     'data': [
         g.Scatter3d(x=data_plot['x_axis'], y=data_plot['y_axis'], z=data_plot['z_axis'], mode='markers'),
-        g.Scatter3d(x=model_yx_plot['x_axis'], y=model_yx_plot['y_axis'], z=model_plot['z_axis'])
+        g.Scatter3d(x=model_plot['x_axis'], y=model_plot['y_axis'], z=model_plot['z_axis'])
     ]
 })
